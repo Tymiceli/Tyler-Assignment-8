@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -33,12 +34,17 @@ public class Assignment8Application {
 //			System.out.println("The number of completed threads: " + tasks.stream().filter(CompletableFuture::isDone).count());
 			Thread.sleep(500);
 		}
-		System.out.println("The number of completed threads: " + tasks.stream().filter(CompletableFuture::isDone).count());
-		System.out.println("The list of records is " + numbersList.size() + " numbers long.");
-		System.out.println("This index should not throw an exception: " + numbersList.get(999999));
-//		Map<Integer, Integer> myNumberMap = 
-//				numbersList.stream().distinct();
-//		System.out.println(numbersList);
+//		System.out.println("The number of completed threads: " + tasks.stream().filter(CompletableFuture::isDone).count());
+//		System.out.println("The list of records is " + numbersList.size() + " numbers long.");
+//		System.out.println("This index should not throw an exception: " + numbersList.get(999999));
+		
+		Map<Integer, Integer> myNumberMap = numbersList
+				.stream()
+				.collect(Collectors.toMap(Function.identity(), duplicateValue -> 1, Integer::sum));
+		
+		System.out.println(myNumberMap);
+		
+		
 
 	}
 }
