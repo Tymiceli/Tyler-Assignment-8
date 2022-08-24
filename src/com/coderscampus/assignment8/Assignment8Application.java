@@ -17,26 +17,28 @@ public class Assignment8Application {
 		Assignment8 a8 = new Assignment8();
 
 		List<Integer> numbersList = new ArrayList<>();
+		numbersList = Collections.synchronizedList(numbersList);
 
 		List<CompletableFuture<Void>> tasks = new ArrayList<>();
 
 		ExecutorService pool = Executors.newCachedThreadPool();
 
-		for (int i = 0; i < 1000; i++) {
-			CompletableFuture<Void> task = CompletableFuture.supplyAsync(() -> a8.getNumbers(), pool)
-					.thenAcceptAsync(numbersList::addAll, pool);
-			tasks.add(task);
-		}
+			for (int i = 0; i < 1000; i++) {
+				CompletableFuture<Void> task = CompletableFuture.supplyAsync(() -> a8.getNumbers(), pool)
+						.thenAcceptAsync(numbersList::addAll, pool);
+				tasks.add(task);
+			}
 
 		while (tasks.stream().filter(CompletableFuture::isDone).count() < 1000) { // while the tasks are all (1000) done
-			Thread.sleep(1000);
+//			System.out.println("The number of completed threads: " + tasks.stream().filter(CompletableFuture::isDone).count());
+			Thread.sleep(500);
 		}
-		
+		System.out.println("The number of completed threads: " + tasks.stream().filter(CompletableFuture::isDone).count());
 		System.out.println("The list of records is " + numbersList.size() + " numbers long.");
-		System.out.println("This index should not throw an exception: " + numbersList.get(1000000));
+		System.out.println("This index should not throw an exception: " + numbersList.get(999999));
 //		Map<Integer, Integer> myNumberMap = 
 //				numbersList.stream().distinct();
 //		System.out.println(numbersList);
-		
+
 	}
 }
